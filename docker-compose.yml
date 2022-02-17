@@ -1,0 +1,31 @@
+version: '3'
+
+services:
+  backend:
+    image: django
+    container_name: backend
+    build:
+      context: ./backend
+    command: python manage.py runserver 0.0.0.0:8000
+    ports:
+      - 8000:8000
+    volumes:
+      - ./backend/:/backend/
+    depends_on:
+      - db
+  
+  db:
+    container_name: mysql_db
+    image: mysql
+    restart: unless-stopped #컨테이너 스탑하기전까지 항상 재시작
+    ports:
+      - "3307:3306"
+    environment: # -e 옵션
+      - MYSQL_DATABASE=shortenturl
+      - MYSQL_ROOT_PASSWORD=1234 # MYSQL 패스워드 설정 옵션
+      - TZ=Asia/Seoul
+    volumes:
+      - mysqlVolume:/data/db
+    
+volumes:
+  mysqlVolume:
