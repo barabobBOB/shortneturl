@@ -2,7 +2,6 @@ version: '3'
 
 services:
   backend:
-    image: django
     container_name: backend
     build:
       context: ./backend
@@ -22,7 +21,7 @@ services:
       - "3307:3306"
     environment: # -e 옵션
       - MYSQL_DATABASE=shortenturl
-      - MYSQL_ROOT_PASSWORD=1234 # MYSQL 패스워드 설정 옵션
+      - MYSQL_ROOT_PASSWORD=1234 # MYSQL root 패스워드 설정 옵션
       - TZ=Asia/Seoul
     volumes:
       - mysqlVolume:/data/db

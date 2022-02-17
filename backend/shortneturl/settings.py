@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'shorter',
 ]
 
 MIDDLEWARE = [
@@ -74,10 +75,14 @@ WSGI_APPLICATION = 'shortneturl.wsgi.application'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
+	'default': { 
+    	'ENGINE': 'django.db.backends.mysql', 
+        'NAME': 'shortenturl', 
+        'USER': 'root', 
+        'PASSWORD': '1234',
+        'HOST': 'db',
+        'PORT': '3306',
+     } 
 }
 
 
