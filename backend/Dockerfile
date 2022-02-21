@@ -1,4 +1,4 @@
-FROM --platform=linux/x86_64 python:3.8
+FROM --platform=linux/x86_64 python:3
 #-> 여기도 두 주석의 위치
 ENV PYTHONDONTWRITEBYTECODE 1
 ENV PYTHONUNBUFFERED 1
@@ -9,4 +9,4 @@ WORKDIR /backend
 
 ADD . /backend/
 
-RUN pip3 install django
+RUN pip3 install -r ./requirements.txt

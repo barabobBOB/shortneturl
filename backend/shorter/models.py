@@ -1,3 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import AbstractUser
 
-# Create your models here.
+class Createuser(models.Model):
+    username = models.CharField(max_length=20)
+    password = models.TextField()
+    email = models.EmailField()
+    updated_at = models.DateField(auto_now=True)
+    created_at = models.DateField(auto_now_add=True)
+
+class Users(AbstractUser):
+    user = models.ForeignKey(Createuser, on_delete=models.CASCADE, null=True)
+
+class UserDetail(models.Model):
+    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    create_user = models.ForeignKey(Createuser, on_delete=models.CASCADE)
