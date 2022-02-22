@@ -41,6 +41,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'shorter',
     'debug_toolbar',
+    'django_seed',
 ]
 
 INTERNAL_IPS = ['127.0.0.1']

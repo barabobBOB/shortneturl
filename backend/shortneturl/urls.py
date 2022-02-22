@@ -21,8 +21,11 @@ from shorter import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path("redirect", views.redirect),
     path("__dubug__/", include(debug_toolbar.urls)),
     path("", views.index, name = "index"),
     path("get_user/<int:user_id>", views.get_user),
+    path("register", views.register_view, name = "register"),
+    path("login", views.login_view, name='login'),
+    path("logout", views.logout, name="logout"),
+    path("list_view", views.list_view),
 ]
