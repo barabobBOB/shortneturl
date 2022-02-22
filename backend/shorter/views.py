@@ -4,6 +4,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.core.paginator import Paginator
 
 from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 
 from shorter.forms import RegistForm
@@ -68,15 +69,17 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 msg = "로그인 완료"
+                return redirect("list")
         return render(request, "login.html", {"form": form, "msg": msg})
     else:
         form = AuthenticationForm()
         return render(request, "login.html", {"form": form})
 
-def logout(request):
+def logout_view(request):
     logout(request)
     return redirect("index")
 
+@login_required #로그인을 해야만 조회가능
 def list_view(request):
     page = int(request.GET.get("p", 1)) # ex) http://localhost:8000/list_view?p=1 뒤에 p=1
     user = User.objects.all().order_by("id")

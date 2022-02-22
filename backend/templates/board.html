@@ -1,23 +1,16 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>admin user list</title>
-</head>
-<body>
+{% extends 'base.html' %}
+{% block content %}
     <h2>User List</h2>
-    <table>
+    <table class="table">
         <thead>
-            <td>ID</td>
-            <td>username</td>
-            <td>email</td>
-            <td>join</td>
-            <td>name</td>
+            <td scope="col">ID</td>
+            <td scope="col">username</td>
+            <td scope="col">email</td>
+            <td scope="col">join</td>
+            <td scope="col">name</td>
         </thred>
         {% for u in user %}
-            <tr>
+            <tr scope="row" class={% cycle "table-success" "table-primary"%}>
                 <td>{{ u.id }}</td>
                 <td>{{ u.username }}</td>
                 <td>{{ u.email }}</td>
@@ -26,24 +19,21 @@
             </tr>    
         {% endfor %}
     </table>
-    <nav>
-        {% if user.has_previous %}
-            <li><a href="?p={{user.previous_page_number}}">이전으로</a>
-        {% else %}
-            <li><a href="#">이전으로</a><li>
-        {% endif %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+            {% if user.has_previous %}
+                <li class="page-item"><a class="page-link" href="?p={{user.previous_page_number}}">이전으로</a>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="#">이전으로</a><li>
+            {% endif %}
 
-        <li><a href="?p={{user.number|add:1}}">{{user.number}}/{{user.paginator.num_pages}}</a></li>
+            <li class="page-item"><a class="page-link" href="?p={{user.number|add:1}}">{{user.number}}/{{user.paginator.num_pages}}</a></li>
 
-        {% if user.has_next %}
-            <li><a href="?p={{user.next_page_number}}">이전으로</a><li>
-        {% else %}
-            <li><a href="#">다음으로</a><li>
-        {% endif %}
+            {% if user.has_next %}
+                <li class="page-item"><a class="page-link" href="?p={{user.next_page_number}}">다음으로</a><li>
+            {% else %}
+                <li class="page-item"><a class="page-link" href="#">다음으로</a><li>
+            {% endif %}
+        </ul>
     </nav>
-    <p>
-        <a href="{% url 'index' %}">홈으로</a>
-        <a href="{% url 'register' %}">회원가입</a>
-    </p>
-</body>
-</html>
+{% endblock content %}
