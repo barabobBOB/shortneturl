@@ -8,9 +8,9 @@ class Createuser(models.Model):
     updated_at = models.DateField(auto_now=True)
     created_at = models.DateField(auto_now_add=True)
 
-class Users(AbstractUser):
+class User(AbstractUser):
     user = models.ForeignKey(Createuser, on_delete=models.CASCADE, null=True)
 
 class UserDetail(models.Model):
-    user = models.OneToOneField(Users, on_delete=models.CASCADE)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
     create_user = models.ForeignKey(Createuser, on_delete=models.CASCADE)
