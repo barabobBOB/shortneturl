@@ -1,3 +1,4 @@
+{% load create_tag %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,5 +17,6 @@
     <a href="{% url 'register' %}">회원가입</a>
     <a href="{% url 'login' %}">로그인</a>
     <a href="{% url 'logout' %}">로그아웃</a>
+    {% text_tag %}
 </body>
 </html>

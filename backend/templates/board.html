@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load create_tag %}
 {% block content %}
     <h2>User List</h2>
     <table class="table">
@@ -13,7 +14,7 @@
             <tr scope="row" class={% cycle "table-success" "table-primary"%}>
                 <td>{{ u.id }}</td>
                 <td>{{ u.username }}</td>
-                <td>{{ u.email }}</td>
+                <td>{{ u.email|email_ma:u.id }}</td>
                 <td>{{ u.date_joined }}</td>
                 <td>{{ u.user.username }}</td>
             </tr>    

@@ -1,3 +1,4 @@
+import email
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
@@ -7,7 +8,7 @@ from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import AuthenticationForm
 
-from shorter.forms import RegistForm
+from shorter.forms import RegistForm, LoginForm
 
 from shorter.models import User
 
@@ -58,22 +59,67 @@ def register_view(request):
         return render(request, "register.html", {"form": form})
     
 def login_view(request):
+    msg = None
+    is_ok = None
     if request.method == "POST":
-        form = AuthenticationForm(request, request.POST)
-        msg = "로그인 정보가 잘못되었습니다. 아이디와 비밀번호를 다시 입력해주세요"
+        form = LoginForm(request.POST)
         if form.is_valid():
-            #form.save()
-            username = form.cleaned_data.get("username")
-            raw_password = form.cleaned_data.get("password")
-            user = authenticate(username = username, password = raw_password)
-            if user is not None:
-                login(request, user)
-                msg = "로그인 완료"
-                return redirect("list")
-        return render(request, "login.html", {"form": form, "msg": msg})
+            email = form.cleaned_data.get("email")
+            password = form.cleaned_data.get("password")
+            remember_me = form.cleaned_data.get("remember_me")
+            msg = "올바른 이메일과 패스워드를 넣어주세요"
+            try:
+                user = User.objects.get(email=email)
+            except User.DoesNotExist:
+                pass
+            else:
+                if user.check_password(password):
+                    msg = None
+                    login(request, user)
+                    is_ok = True
+                    request.session["remember_me"] = remember_me
     else:
-        form = AuthenticationForm()
-        return render(request, "login.html", {"form": form})
+        msg = None
+        form = LoginForm()
+        
+    print(f"REMEMVER ME STATUS --> {request.session.get('remember_me')}")
+    return render(request, "login.html", {"form": form, "msg": msg, "is_ok": is_ok})
+
+    #     form = AuthenticationForm(request, request.POST)
+    #     if form.is_valid():
+    #         username = form.cleaned_data.get("username")
+    #         password = form.cleaned_data.get("password")
+    #         user = authenticate(username = username, password=password)
+    #         if user is not None:
+    #             login(request, user)
+    #             is_ok = True
+    #     else:
+    #         msg = '올바른 아이디와 비밀번호를 입력해주세요'
+    # else:
+    #     form = AuthenticationForm()
+        
+    # for visible in form.visible_fields(): 
+    #     print(visible)
+    #     visible.field.widget.attrs["placeholder"] = "유저ID" if visible.name =="username" else "패스워드"
+    #     visible.field.widget.attrs["class"] = "form-control"
+        
+    # return render(request, "login.html", {"form": form, "msg": msg, "is_ok": is_ok})        
+    #     form = AuthenticationForm(request, request.POST)
+    #     msg = "로그인 정보가 잘못되었습니다. 아이디와 비밀번호를 다시 입력해주세요"
+    #     if form.is_valid():
+    #         #form.save()
+    #         username = form.cleaned_data.get("username")
+    #         raw_password = form.cleaned_data.get("password")
+    #         user = authenticate(username = username, password = raw_password)
+    #         if user is not None:
+    #             login(request, user)
+    #             msg = "로그인 완료"
+    #             return redirect("list")
+    #     return render(request, "login.html", {"form": form, "msg": msg})
+    # else:
+    #     form = AuthenticationForm()
+    #     return render(request, "login.html", {"form": form})
+    # return render(request, "login.html",{"hello":"world"})
 
 def logout_view(request):
     logout(request)
